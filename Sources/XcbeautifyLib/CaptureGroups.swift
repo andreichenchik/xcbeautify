@@ -2086,7 +2086,7 @@ struct SwiftTestingTestFailedCaptureGroup: CaptureGroup, JUnitParallelReportable
     /// $1 = test name
     /// $2 = time taken in seconds
     /// $3 = number of issues
-    static let regex = XCRegex(pattern: #"^[^ ] +Test (?!run\s)(.*) failed after ([\d.]+) seconds with (\d+) issue[s]?\.$"#)
+    static let regex = XCRegex(pattern: #"^[^ ] +Test (?!run\s)(?!.* with \d+ test cases? failed)(.*) failed after ([\d.]+) seconds with (\d+) issue[s]?\.$"#)
 
     let testName: String
     let timeTaken: String
@@ -2114,7 +2114,7 @@ struct SwiftTestingTestPassedCaptureGroup: CaptureGroup, JUnitParallelReportable
     /// Regular expression to capture the successful completion of a test case.
     /// $1 = test name
     /// $2 = time taken in seconds
-    static let regex = XCRegex(pattern: #"^[^ ] +Test (?!run\s)(.*) passed after ([\d.]+) seconds\.$"#)
+    static let regex = XCRegex(pattern: #"^[^ ] +Test (?!run\s)(?!.* with \d+ test cases? passed)(.*) passed after ([\d.]+) seconds\.$"#)
 
     let testName: String
     let timeTaken: String
