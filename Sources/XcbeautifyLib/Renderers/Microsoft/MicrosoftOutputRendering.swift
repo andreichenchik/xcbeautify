@@ -1,7 +1,7 @@
 //
 // MicrosoftOutputRendering.swift
 //
-// Copyright (c) 2025 Charles Pisciotta and other contributors
+// Copyright (c) 2026 Charles Pisciotta and other contributors
 // Licensed under MIT License
 //
 // See https://github.com/cpisciotta/xcbeautify/blob/main/LICENSE for license information
@@ -266,6 +266,40 @@ extension MicrosoftOutputRendering {
         let message = "Recorded an issue" + (group.numberOfArguments.map { " (\($0)) argument(s)" } ?? "")
         return makeOutputLog(
             annotation: .error,
+            message: message
+        )
+    }
+
+    func formatSwiftTestingParameterizedIssue(group: SwiftTestingParameterizedIssueCaptureGroup) -> String {
+        var fileComponents: FileComponents?
+        var detailMessage: String?
+
+        let issueDetails = group.issueDetails.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !issueDetails.isEmpty {
+            let locationAndMessage = issueDetails.split(separator: ": ", maxSplits: 1, omittingEmptySubsequences: false)
+            if let locationPart = locationAndMessage.first {
+                let locationSegments = locationPart.split(separator: ":").map(String.init)
+                if let path = locationSegments.first, !path.isEmpty {
+                    let line = locationSegments.count > 1 ? Int(locationSegments[1]) : nil
+                    let column = locationSegments.count > 2 ? Int(locationSegments[2]) : nil
+                    fileComponents = FileComponents(path: path, line: line, column: column)
+                    if locationAndMessage.count > 1 {
+                        detailMessage = String(locationAndMessage[1]).trimmingCharacters(in: .whitespacesAndNewlines)
+                    }
+                }
+            }
+        }
+
+        let argumentInfo = "\(group.numberOfArguments) argument(s) \(group.argumentDetails)"
+        let message =
+            if let detailMessage, !detailMessage.isEmpty {
+                "Recorded an issue with \(argumentInfo) (\(detailMessage))"
+            } else {
+                "Recorded an issue with \(argumentInfo)"
+            }
+        return makeOutputLog(
+            annotation: .error,
+            fileComponents: fileComponents,
             message: message
         )
     }

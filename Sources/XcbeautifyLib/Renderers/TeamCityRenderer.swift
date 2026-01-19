@@ -1,7 +1,7 @@
 //
 // TeamCityRenderer.swift
 //
-// Copyright (c) 2025 Charles Pisciotta and other contributors
+// Copyright (c) 2026 Charles Pisciotta and other contributors
 // Licensed under MIT License
 //
 // See https://github.com/cpisciotta/xcbeautify/blob/main/LICENSE for license information
@@ -207,6 +207,11 @@ struct TeamCityRenderer: OutputRendering {
     func formatSwiftTestingIssueArguments(group: SwiftTestingIssueArgumentCaptureGroup) -> String {
         let arguments = group.numberOfArguments.map { "(\($0) argument(s))" } ?? ""
         return outputTeamCityWarning(text: "Recorded an issue", details: arguments)
+    }
+
+    func formatSwiftTestingParameterizedIssue(group: SwiftTestingParameterizedIssueCaptureGroup) -> String {
+        let details = "(\(group.numberOfArguments) argument(s) \(group.argumentDetails) at \(group.issueDetails))"
+        return outputTeamCityWarning(text: "Recorded an issue", details: details)
     }
 }
 

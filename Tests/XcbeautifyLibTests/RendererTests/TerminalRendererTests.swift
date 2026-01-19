@@ -1,7 +1,7 @@
 //
 // TerminalRendererTests.swift
 //
-// Copyright (c) 2025 Charles Pisciotta and other contributors
+// Copyright (c) 2026 Charles Pisciotta and other contributors
 // Licensed under MIT License
 //
 // See https://github.com/cpisciotta/xcbeautify/blob/main/LICENSE for license information
@@ -775,6 +775,12 @@ import Testing
     @Test func swiftTestingIssueDetails() {
         let input = #"􀢄  Test "myTest" recorded an issue at PlanTests.swift:43:5: Expectation failed"#
         let output = #"    [!]  Test "myTest" recorded an issue at PlanTests.swift:43:5: Expectation failed"#
+        #expect(noColoredFormatted(input) == output)
+    }
+
+    @Test func swiftTestingParameterizedIssue() {
+        let input = #"✘ Test parameterizedFailingTest(value:) recorded an issue with 1 argument value → 1 at InfrastructureTests.swift:41:5: Expectation failed: (value → 1) > 10"#
+        let output = #"    [!]  Test parameterizedFailingTest(value:) recorded an issue with 1 argument(s) value → 1 at InfrastructureTests.swift:41:5: Expectation failed: (value → 1) > 10"#
         #expect(noColoredFormatted(input) == output)
     }
 

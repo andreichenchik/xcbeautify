@@ -1,7 +1,7 @@
 //
 // CaptureGroups.swift
 //
-// Copyright (c) 2025 Charles Pisciotta and other contributors
+// Copyright (c) 2026 Charles Pisciotta and other contributors
 // Licensed under MIT License
 //
 // See https://github.com/cpisciotta/xcbeautify/blob/main/LICENSE for license information
@@ -1900,10 +1900,11 @@ struct SwiftTestingParameterizedIssueCaptureGroup: CaptureGroup {
 struct SwiftTestingIssueArgumentCaptureGroup: CaptureGroup {
     static let outputType: OutputType = .testCase
 
-    /// Regular expression to capture the symbol, test description, and optional number of arguments.
+    /// Regular expression to capture the symbol, test description, and number of arguments.
+    /// Matches lines ending with "arguments." (no location details).
     /// $1 = test description
-    /// $2 = number of arguments (optional)
-    static let regex = XCRegex(pattern: #"^[^ ] +Test (.*?) recorded an issue with (\d+) arguments?"#)
+    /// $2 = number of arguments
+    static let regex = XCRegex(pattern: #"^[^ ] +Test (.*?) recorded an issue with (\d+) arguments?\.$"#)
 
     let testDescription: String
     let numberOfArguments: Int?

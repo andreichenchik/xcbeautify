@@ -1,7 +1,7 @@
 //
 // GitHubActionsRendererTests.swift
 //
-// Copyright (c) 2025 Charles Pisciotta and other contributors
+// Copyright (c) 2026 Charles Pisciotta and other contributors
 // Licensed under MIT License
 //
 // See https://github.com/cpisciotta/xcbeautify/blob/main/LICENSE for license information
@@ -766,6 +766,13 @@ import Testing
         let input = #"􀢄  Test "myTest" recorded an issue at PlanTests.swift:43:5"#
         let formatted = logFormatted(input)
         let expectedOutput = "::error file=PlanTests.swift,line=43,col=5::Recorded an issue"
+        #expect(formatted == expectedOutput)
+    }
+
+    @Test func swiftTestingParameterizedIssue() {
+        let input = #"✘ Test parameterizedFailingTest(value:) recorded an issue with 1 argument value → 1 at InfrastructureTests.swift:41:5: Expectation failed: (value → 1) > 10"#
+        let formatted = logFormatted(input)
+        let expectedOutput = "::error file=InfrastructureTests.swift,line=41,col=5::Recorded an issue with 1 argument(s) value → 1 (Expectation failed: (value → 1) > 10)"
         #expect(formatted == expectedOutput)
     }
 
