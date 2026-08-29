@@ -769,6 +769,13 @@ struct TeamCityRendererTests {
         #expect(formatted == "##teamcity[message text=\'Recorded an issue|n(2 argument(s))\' status=\'WARNING\']\nRecorded an issue")
     }
 
+    @Test func swiftTestingIssueWithArgumentDetails() {
+        let input = #"✘ Test example(input:) recorded an issue with 1 argument input → "meet at noon" at Tests/My Tests.swift:41:5: Expectation failed"#
+        let formatted = noColoredFormatted(input)
+        let details = #"Test example(input:) recorded an issue with input → "meet at noon" at Tests/My Tests.swift:41:5: Expectation failed"#
+        #expect(formatted == "##teamcity[message text=\'Recorded an issue|n\(details)\' status=\'WARNING\']\nRecorded an issue")
+    }
+
     @Test func swiftTestingIssueDetails() {
         let input = #"􀢄  Test "myTest" recorded an issue at PlanTests.swift:43:5: Expectation failed"#
         let formatted = noColoredFormatted(input)

@@ -271,9 +271,22 @@ extension MicrosoftOutputRendering {
     }
 
     func formatSwiftTestingIssueArguments(group: SwiftTestingIssueArgumentCaptureGroup) -> String {
-        let message = "Recorded an issue" + (group.numberOfArguments.map { " (\($0)) argument(s)" } ?? "")
+        guard let argumentDetails = group.argumentDetails,
+              let filePath = group.filePath,
+              let lineNumber = group.lineNumber,
+              let columnNumber = group.columnNumber
+        else {
+            return makeOutputLog(
+                annotation: .error,
+                message: "Recorded an issue (\(group.numberOfArguments)) argument(s)"
+            )
+        }
+
+        let detailMessage = group.issueMessage.map { " (\($0))" } ?? ""
+        let message = "Test \(group.testDescription) recorded an issue with \(argumentDetails)\(detailMessage)"
         return makeOutputLog(
             annotation: .error,
+            fileComponents: FileComponents(path: filePath, line: lineNumber, column: columnNumber),
             message: message
         )
     }
