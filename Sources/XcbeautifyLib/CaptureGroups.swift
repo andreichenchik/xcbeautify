@@ -1898,20 +1898,52 @@ struct SwiftMergeGeneratedHeadersCaptureGroup: CaptureGroup {
 struct SwiftTestingIssueArgumentCaptureGroup: TestCaseCaptureGroup {
     static let outputType: OutputType = .testCaseFailure
 
-    /// Regular expression to capture the symbol, test description, and optional number of arguments.
+    /// Regular expression to capture the symbol, test description, number of arguments, and remaining issue details.
     /// $1 = test description
-    /// $2 = number of arguments (optional)
-    static let regex = XCRegex(pattern: #"^[^ ] +Test (.*?) recorded an issue with (\d+) arguments?"#)
+    /// $2 = number of arguments
+    /// $3 = argument, location, and message details
+    static let regex = XCRegex(pattern: #"^[^ ] +Test (.*?) recorded an issue with (\d+) arguments?(.*)$"#)
+
+    private static let detailsRegex = XCRegex(pattern: #"^(.*) at (.*):(\d+):(\d+)(?:: (.*))?$"#)
 
     let testDescription: String
-    let numberOfArguments: Int?
+    let numberOfArguments: Int
+    let argumentDetails: String?
+    let filePath: String?
+    let lineNumber: Int?
+    let columnNumber: Int?
+    let issueMessage: String?
+
+    var formattedDetails: String? {
+        guard let argumentDetails, let filePath, let lineNumber, let columnNumber else { return nil }
+        let message = issueMessage.map { ": \($0)" } ?? ""
+        return "\(argumentDetails) at \(filePath):\(lineNumber):\(columnNumber)\(message)"
+    }
 
     init?(groups: [String]) {
-        assert(groups.count >= 1)
-        guard let testDescription = groups[safe: 0] else { return nil }
+        assert(groups.count >= 3)
+        guard let testDescription = groups[safe: 0],
+              let numberOfArguments = groups[safe: 1].flatMap(Int.init),
+              let remainingDetails = groups[safe: 2] else { return nil }
 
         self.testDescription = testDescription
-        numberOfArguments = groups[safe: 1].flatMap(Int.init)
+        self.numberOfArguments = numberOfArguments
+
+        let details = remainingDetails.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let detailGroups = Self.detailsRegex.captureGroups(for: details), detailGroups.count >= 4 else {
+            argumentDetails = nil
+            filePath = nil
+            lineNumber = nil
+            columnNumber = nil
+            issueMessage = nil
+            return
+        }
+
+        argumentDetails = detailGroups[safe: 0]
+        filePath = detailGroups[safe: 1]
+        lineNumber = detailGroups[safe: 2].flatMap(Int.init)
+        columnNumber = detailGroups[safe: 3].flatMap(Int.init)
+        issueMessage = detailGroups[safe: 4]
     }
 }
 

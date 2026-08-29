@@ -178,7 +178,7 @@ Suite "Tag/Tag List Tests" started
 Suite A started
     [33m⊘[0m "Repeated calls to #expect() run in reasonable time" skipped (time-sensitive)
     [33m⊘[0m "Dumping a Runner.Plan" skipped
-    [33m⚠️[0m  Test "Different kinds of functions are handled correctly" recorded an issue with 3 argument(s)
+    [33m⚠️[0m  Test "Different kinds of functions are handled correctly" recorded an issue with input → "@Test(arguments: []) func f(f: () -> String) {}", expectedTypeName → "(() -> String).self", otherCode → nil at TestDeclarationMacroTests.swift:363:7: Expectation failed: !((output → "func f(f: () -> String) {}
     [33m⚠️[0m  Test "Different kinds of functions are handled correctly" recorded an issue with 3 argument(s)
     [33m⚠️[0m  Test "Different kinds of functions are handled correctly" recorded an issue with 3 argument(s)
     [33m⚠️[0m  Test "Different kinds of functions are handled correctly" recorded an issue with 3 argument(s)

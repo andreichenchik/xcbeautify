@@ -295,6 +295,18 @@ struct ParserTests {
         #expect(captureGroup.issueDetails == "PlanTests.swift:43:5: Expectation failed")
     }
 
+    @Test func matchSwiftTestingIssueWithArgumentDetails() throws {
+        let input = #"✘ Test example(input:) recorded an issue with 1 argument input → "meet at noon" at Tests/My Tests.swift:41:5: Expectation failed"#
+        let captureGroup = try #require(parser.parse(line: input) as? SwiftTestingIssueArgumentCaptureGroup)
+        #expect(captureGroup.testDescription == "example(input:)")
+        #expect(captureGroup.numberOfArguments == 1)
+        #expect(captureGroup.argumentDetails == #"input → "meet at noon""#)
+        #expect(captureGroup.filePath == "Tests/My Tests.swift")
+        #expect(captureGroup.lineNumber == 41)
+        #expect(captureGroup.columnNumber == 5)
+        #expect(captureGroup.issueMessage == "Expectation failed")
+    }
+
     @Test func matchSwiftTestingPassingArgument() throws {
         let input = #"􀟈 Passing 2 arguments input → "argument1, argument2""#
         let captureGroup = try #require(parser.parse(line: input) as? SwiftTestingPassingArgumentCaptureGroup)

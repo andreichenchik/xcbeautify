@@ -752,7 +752,7 @@ extension OutputRendering {
     }
 
     func formatSwiftTestingIssueArguments(group: SwiftTestingIssueArgumentCaptureGroup) -> String {
-        let argumentsInfo = group.numberOfArguments.map { " with \($0) argument(s)" } ?? ""
+        let argumentsInfo = group.formattedDetails.map { " with \($0)" } ?? " with \(group.numberOfArguments) argument(s)"
         let message = " Test \(group.testDescription) recorded an issue\(argumentsInfo)"
         return colored ? Format.indent + Symbol.warning.yellow() + " " + message : Format.indent + Symbol.asciiWarning + " " + message
     }

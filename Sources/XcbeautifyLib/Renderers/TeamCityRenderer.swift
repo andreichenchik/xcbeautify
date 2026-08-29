@@ -208,8 +208,10 @@ struct TeamCityRenderer: OutputRendering {
     }
 
     func formatSwiftTestingIssueArguments(group: SwiftTestingIssueArgumentCaptureGroup) -> String {
-        let arguments = group.numberOfArguments.map { "(\($0) argument(s))" } ?? ""
-        return outputTeamCityWarning(text: "Recorded an issue", details: arguments)
+        let details = group.formattedDetails.map {
+            "Test \(group.testDescription) recorded an issue with \($0)"
+        } ?? "(\(group.numberOfArguments) argument(s))"
+        return outputTeamCityWarning(text: "Recorded an issue", details: details)
     }
 }
 

@@ -767,6 +767,13 @@ struct GitHubActionsRendererTests {
         #expect(formatted == expectedOutput)
     }
 
+    @Test func swiftTestingIssueWithArgumentDetails() {
+        let input = #"✘ Test example(input:) recorded an issue with 1 argument input → "meet at noon" at Tests/My Tests.swift:41:5: Expectation failed"#
+        let formatted = logFormatted(input)
+        let expectedOutput = #"::error file=Tests/My Tests.swift,line=41,col=5::Test example(input:) recorded an issue with input → "meet at noon" (Expectation failed)"#
+        #expect(formatted == expectedOutput)
+    }
+
     @Test func swiftTestingIssueDetails() {
         let input = #"􀢄  Test "myTest" recorded an issue at PlanTests.swift:43:5: Expectation failed"#
         let formatted = logFormatted(input)

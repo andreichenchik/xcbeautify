@@ -784,6 +784,12 @@ struct TerminalRendererTests {
         #expect(noColoredFormatted(input) == output)
     }
 
+    @Test func swiftTestingIssueWithArgumentDetails() {
+        let input = #"✘ Test example(input:) recorded an issue with 1 argument input → "meet at noon" at Tests/My Tests.swift:41:5: Expectation failed"#
+        let output = #"    [!]  Test example(input:) recorded an issue with input → "meet at noon" at Tests/My Tests.swift:41:5: Expectation failed"#
+        #expect(noColoredFormatted(input) == output)
+    }
+
     @Test func swiftTestingIssueDetails() {
         let input = #"􀢄  Test "myTest" recorded an issue at PlanTests.swift:43:5: Expectation failed"#
         let output = #"    [!]  Test "myTest" recorded an issue at PlanTests.swift:43:5: Expectation failed"#
